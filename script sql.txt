@@ -1,0 +1,54 @@
+-- Creación de la base de datos
+CREATE DATABASE Biblioteca;
+USE Biblioteca;
+
+-- Tabla de Autores
+CREATE TABLE Autor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- Tabla de Libros
+CREATE TABLE Libro (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    autor_id INT NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    cantidad INT NOT NULL CHECK (cantidad >= 0),
+    FOREIGN KEY (autor_id) REFERENCES Autor(id) ON DELETE CASCADE
+);
+
+-- Tabla de Usuarios
+CREATE TABLE Usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- Tabla de Préstamos
+CREATE TABLE Prestamo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    libro_id INT NOT NULL,
+    fecha_prestamo DATE NOT NULL DEFAULT CURDATE(),
+    fecha_devolucion DATE DEFAULT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (libro_id) REFERENCES Libro(id) ON DELETE CASCADE
+);
+
+-- Inserción de datos de ejemplo
+-- Autores
+INSERT INTO Autor (nombre) VALUES ('Gabriel García Márquez'), ('George Orwell');
+
+-- Libros
+INSERT INTO Libro (titulo, autor_id, categoria, cantidad) 
+VALUES 
+    ('Cien Años de Soledad', 1, 'Ficción', 5),
+    ('El Amor en los Tiempos del Cólera', 1, 'Romance', 3),
+    ('1984', 2, 'Distopía', 4);
+
+-- Usuarios
+INSERT INTO Usuario (nombre, correo) VALUES ('Juan Pérez', 'juan.perez@example.com');
+
+-- Préstamo (Ejemplo de prestar un libro)
+INSERT INTO Prestamo (usuario_id, libro_id) VALUES (1, 1);

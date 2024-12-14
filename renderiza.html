@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar API con JavaScript</title>
+    <script>
+        // Función para realizar la consulta a la API
+        function consultarAPI() {
+            // URL de la API (puedes cambiarla por cualquier otra API)
+            const url = 'http://localhost:8080/api/books'; // Ejemplo de API
+
+            // Usamos fetch para hacer la consulta
+            fetch(url)
+                .then(response => response.json()) // Convertir la respuesta a formato JSON
+                .then(data => {
+                    console.log(data);
+
+                    // Mostrar los datos en el div con id "resultado"
+                    const resultadoDiv = document.getElementById('resultado');
+                    resultadoDiv.innerHTML = ''; // Limpiar el contenido anterior
+
+                    data.forEach(book => {
+                        resultadoDiv.innerHTML += `
+                            <div class="book">
+                                <h3>Título:</h3>
+                                <p>${book.title}</p>
+                                <h3>Categoría:</h3>
+                                <p>${book.category}</p>
+                                <h3>Autor:</h3>
+                                <p>${book.author}</p>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al consultar la API:', error);
+                    document.getElementById('resultado').innerHTML = 'Hubo un error al consultar la API.';
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Consultar API</h1>
+    <button onclick="consultarAPI()">Consultar API</button>
+    <div id="resultado">
+        <!-- Aquí se mostrará el contenido de la API -->
+    </div>
+</body>
+</html>
